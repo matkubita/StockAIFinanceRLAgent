@@ -17,5 +17,13 @@ The agent trades the following tickers:
 * **Data Source:** Yahoo Finance / Alpaca via FinRL integration.
 
 
----
-*Disclaimer: This project is for educational purposes only. Trading stocks involves significant risk.*
+### 👥 Team & Responsibilities
+
+The following table outlines the distribution of work for implementing the specific Reinforcement Learning models:
+
+| Algorithm | Team Member |
+| :--- | :--- |
+| **PPO** (Proximal Policy Optimization) | Mateusz Kubita |
+| **A2C** (Advantage Actor-Critic) | Radek Szewczyk |
+| **DDPG** (Deep Deterministic Policy Gradient) | Jan Zubalewicz |
+
