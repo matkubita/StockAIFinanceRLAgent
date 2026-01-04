@@ -11,7 +11,8 @@ The agent trades the following tickers:
 
 ## 🧠 Core Technologies
 * **Environment:** [FinRL](https://github.com/AI4Finance-Foundation/FinRL) (built on OpenAI Gym/Gymnasium).
-* **Algorithms:** * **PPO:** Proximal Policy Optimization
+* **Algorithms:** 
+    * **PPO:** Proximal Policy Optimization
     * **A2C:** Advantage Actor-Critic
     * **DDPG:** Deep Deterministic Policy Gradient
 * **Data Source:** Yahoo Finance / Alpaca via FinRL integration.
@@ -23,9 +24,9 @@ The following table outlines the distribution of work for implementing the speci
 
 | Algorithm | Team Member |
 | :--- | :--- |
-| **PPO** (Proximal Policy Optimization) | Mateusz Kubita |
 | **A2C** (Advantage Actor-Critic) | Radek Szewczyk |
 | **DDPG** (Deep Deterministic Policy Gradient) | Jan Zubalewicz |
+| **PPO** (Proximal Policy Optimization) | Mateusz Kubita |
 
 ### 📅 Dataset Configuration
 
