@@ -7,7 +7,7 @@ The objective is to train and compare different RL agents to optimize portfolio 
 
 ## 📊 Universe of Stocks
 The agent trades the following tickers:
-`['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'BRK-B', 'WMT', 'JPM']`
+`['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'BRK.B', 'TSLA', 'AVGO', 'JPM']`
 
 ## 🧠 Core Technologies
 * **Environment:** [FinRL](https://github.com/AI4Finance-Foundation/FinRL) (built on OpenAI Gym/Gymnasium).
@@ -34,13 +34,13 @@ To ensure consistent results across all models, we have defined the following ti
 
 | Period | Start Date | End Date |
 | :--- | :--- | :--- |
-| **Training Range** | `2018-01-01` | `2023-01-01` |
-| **Trading / Testing Range** | `2023-01-01` | `2024-01-01` |
+| **Training Range** | `2015-01-01` | `2020-07-01` |
+| **Trading / Testing Range** | `2020-07-01` | `2021-10-29` |
 
 **Constants used in the code:**
 ```python
-TRAIN_START_DATE = '2018-01-01'
-TRAIN_END_DATE = '2023-01-01'
-TRADE_START_DATE = '2023-01-01'
-TRADE_END_DATE = '2024-01-01'
+TRAIN_START_DATE = '2015-01-01'
+TRAIN_END_DATE = '2020-07-01'
+TRADE_START_DATE = '2020-07-01'
+TRADE_END_DATE = '2021-10-29'
 
