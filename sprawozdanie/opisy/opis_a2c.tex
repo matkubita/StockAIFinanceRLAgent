@@ -1,0 +1,43 @@
+\section{Algorytm Advantage Actor Critic (A2C)}
+
+Algorytm Advantage Actor Critic, czyli A2C, to synchroniczna wersja metody Actor-Critic, należąca do rodziny algorytmów wykorzystujących gradient polityki. W bibliotece FinRL, A2C jest zaimplementowany w oparciu o rozwiązania z biblioteki Stable Baselines 3 (SB3). Podstawą działania A2C jest współpraca dwóch oddzielnych struktur – najczęściej sieci neuronowych – które pełnią różne role w procesie uczenia ze wzmocnieniem:
+
+\begin{description}
+    \item[Aktor:] Jest to moduł odpowiedzialny za przybliżenie polityki działania w zależności od stanu rynku. Jego zadaniem jest określenie, jakie decyzje inwestycyjne podejmować w danym momencie. W przypadku rynków finansowych chodzi o decyzję dotyczącą rozdysponowania aktywów: kupno, sprzedaż lub wstrzymanie się od działań (hold).
+    
+    \item[Krytyk:] Jest to moduł odpowiedzialny za przybliżenie funkcji wartości stanu. Jego zadanie polega na ocenie stanu, co pozwala oszacować przyszłe wyniki i przewidywany zwrot.
+\end{description}
+
+Kluczowym elementem algorytmu jest mechanizm funkcji przewagi (Advantage Function). Jest on zdefiniowany jako różnica między wartością wykonania danej akcji a oczekiwaną wartością stanu. W praktyce oznacza to, że proces uczenia nie jest sterowany bezpośrednio przez bezwzględną wartość nagrody, lecz przez różnicę między uzyskanym wynikiem a tym, czego spodziewał się Krytyk. Akcja jest nagradzana pozytywnie tylko wtedy, gdy rzeczywisty zwrot jest lepszy niż oczekiwania Krytyka dla danego stanu. Ten mechanizm pozwala na zmniejszenie wariancji estymatora gradientu oraz ustabilizowanie procesu nauki. Zmusza on agenta do poszukiwania strategii, które generują ponadprzeciętne stopy zwrotu (alfa), a nie tylko do naśladowania ogólnego trendu rynkowego.
+
+\subsection{Implementacja i Architektura Sieci}
+
+W środowisku FinRL standardowa konfiguracja dla A2C polega na wykorzystaniu architektury perceptrona wielowarstwowego. Fizyczna struktura modelu składa się z dwóch równoległych sieci neuronowych (lub sieci ze wspólnym korpusem i oddzielnymi głowicami), które otrzymują ten sam wektor wejściowy, czyli stan.
+
+\subsubsection{Przepływ danych}
+
+Stan rynku reprezentowany jest jako wektor numeryczny. Zawiera on kluczowe informacje, takie jak: saldo konta, ostatnie ceny akcji, liczba posiadanych udziałów oraz wskaźniki techniczne pomagające w analizie trendu (np. MACD, RSI). Te informacje są przetwarzane przez warstwy ukryte modelu – zazwyczaj są to dwie warstwy po 64 neurony każda, wykorzystujące funkcje aktywacji Tanh lub ReLU.
+
+Na wyjściu sieci pojawiają się dwa rodzaje sygnałów:
+\begin{itemize}
+    \item \textbf{Sieć Aktora:} Zwraca wektor parametrów rozkładu prawdopodobieństwa dla akcji (instrumentów finansowych), co determinuje konkretne decyzje handlowe.
+    \item \textbf{Sieć Krytyka:} Zwraca pojedynczą wartość skalarną $V(s)$, będącą oceną atrakcyjności bieżącego stanu rynku.
+\end{itemize}
+
+\subsection{Proces Uczenia i Hiperparametry}
+
+Algorytm działa w trybie on-policy, co oznacza, że uczy się na podstawie danych generowanych przez bieżącą politykę. W przypadku FinRL, w pliku konfiguracyjnym \texttt{config.py}, kluczowe parametry przyjmują zazwyczaj następujące wartości:
+
+\begin{itemize}
+    \item \texttt{n\_steps = 5}: Liczba kroków wykonywanych w środowisku przed aktualizacją wag sieci (batch).
+    \item \texttt{ent\_coef = 0.01}: Współczynnik entropii. Zapobiega on przedwczesnej zbieżności do suboptymalnego rozwiązania (lokalnego minimum), wymuszając eksplorację różnych możliwości.
+    \item \texttt{learning\_rate = 0.0007}: Współczynnik uczenia dla optymalizatora.
+\end{itemize}
+
+Aktualizacja wag odbywa się cyklicznie po zebraniu określonej liczby próbek. Funkcja straty w tym procesie jest złożona i składa się z trzech komponentów: części odpowiedzialnej za maksymalizację nagrody (policy loss), części minimalizującej błąd predykcji wartości przez Krytyka (value loss) oraz części maksymalizującej entropię.
+
+\subsection{Wyzwania w zastosowaniach finansowych}
+
+Zastosowanie architektury Actor-Critic na rynkach finansowych wiąże się ze specyficznymi wyzwaniami. Główny problem dotyczy efektywności rynku. Jeśli Krytyk nauczy się precyzyjnie szacować średnią rynkową (np. trend indeksu giełdowego), wówczas funkcja przewagi dla strategii pasywnych będzie oscylować wokół zera. Oznacza to, że Aktor musi spełnić wysokie wymagania, aby uzyskać pozytywny sygnał uczenia – musi wygenerować wynik lepszy od benchmarku. 
+
+W sytuacjach, gdy rynek jest wysoce efektywny lub brakuje wyraźnych wzorców (szum), może to powodować trudności w zbieżności algorytmu. Można temu zaradzić, stosując odpowiednią inżynierię funkcji nagrody, na przykład poprzez maksymalizację współczynnika Sharpe'a (aktor usi zarabiać pieniądze, ale nie podejmować zbyt dużego ryzyka) zamiast surowego zysku.
