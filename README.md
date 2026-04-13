@@ -5,7 +5,7 @@ An automated trading system utilizing **Reinforcement Learning** to navigate the
 ## Project Goal
 The objective is to train and compare different RL agents to optimize portfolio returns using the most liquid and influential stocks in the market.
 
-## 📊 Universe of Stocks
+## Universe of Stocks
 The agent trades the following tickers:
 `['AAPL', 'MSFT', 'NVDA', 'AMZN', 'GOOGL', 'META', 'TSLA', 'BRK-B', 'WMT', 'JPM']`
 
